@@ -7,15 +7,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder> {
-    private List<Photo> photoList;
+    private final List<Photo> photoList;
+    private final DatabaseHelper databaseHelper;
 
-    public PhotoAdapter(List<Photo> photoList) {
+    public PhotoAdapter(List<Photo> photoList, DatabaseHelper databaseHelper) {
         this.photoList = photoList;
+        this.databaseHelper = databaseHelper;
     }
 
     public static class PhotoViewHolder extends RecyclerView.ViewHolder {
@@ -31,6 +34,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         }
     }
 
+    @NonNull
     @Override
     public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -44,13 +48,21 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         holder.imageView.setImageResource(photo.getImageResId());
         holder.nameTextView.setText(photo.getName());
 
-        if (photo.isFavorite()) {
+        boolean favorite = databaseHelper.isFavorite(1, photo.getImageDbId());// Replace with real user ID
+
+        if (favorite) {
             holder.favoriteButton.setImageResource(R.drawable.ic_heart_filled_res);
         } else {
             holder.favoriteButton.setImageResource(R.drawable.ic_heart_outline_res);
         }
 
         holder.favoriteButton.setOnClickListener(v -> {
+            if(photo.isFavorite()) {
+                databaseHelper.removeFavorite(1, photo.getImageDbId()); // Replace with real user ID
+            } else {
+                databaseHelper.addFavorite(1, photo.getImageDbId()); // Replace with real user ID
+            }
+
             photo.setFavorite(!photo.isFavorite());
             notifyItemChanged(position);
         });

@@ -1,16 +1,11 @@
 package org.dronworks.testphotos;
 
 public class Photo {
-    private int imageResId;
-    private String location;
+
+    private final int imageDbId;
+    private final int imageResId;
     private boolean isFavorite;
-
-    private String name;
-
-    public Photo(String name, int imageResId) {
-        this.name = name;
-        this.imageResId = imageResId;
-    }
+    private final String name;
 
     public String getName() {
         return name;
@@ -23,17 +18,18 @@ public class Photo {
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
     }
-    public Photo(int imageResId, String location, String s) {
+    public Photo(int imageResId, String name, int imageDbId) {
         this.imageResId = imageResId;
-        this.location = location;
-        this.name = location;
+        this.name = name;
+        this.imageDbId = imageDbId;
+    }
+
+    public int getImageDbId() {
+        return imageDbId;
     }
 
     public int getImageResId() {
         return imageResId;
     }
 
-    public String getLocation() {
-        return location;
-    }
 }

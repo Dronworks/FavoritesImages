@@ -1,17 +1,12 @@
 package org.dronworks.testphotos;
 
-import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +14,8 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     PhotoAdapter adapter;
+    DatabaseHelper dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,15 +23,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        dbHelper = new DatabaseHelper(this);
 
-        List<Photo> photos = loadPhotosByLocation(this);
+        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        boolean isFirstLaunch = prefs.getBoolean("isFirstLaunch", true);
 
-        adapter = new PhotoAdapter(photos);
+        if (isFirstLaunch) {
+            dbHelper.createDefaultUser();
+            loadPhotosToDB();
+            prefs.edit().putBoolean("isFirstLaunch", false).apply();
+        }
+
+
+        List<Photo> photos = dbHelper.loadPhotosByLocation();
+
+        adapter = new PhotoAdapter(photos, dbHelper);
         recyclerView.setAdapter(adapter);
     }
 
-    public List<Photo> loadPhotosByLocation(Context context) {
-        List<Photo> photos = new ArrayList<>();
+
+    private void loadPhotosToDB() {
         Map<String, Integer> resourceMap = new HashMap<>();
 
         // Use reflection to get all drawable resources
@@ -53,10 +61,11 @@ public class MainActivity extends AppCompatActivity {
         // Group photos by location
         for (Map.Entry<String, Integer> entry : resourceMap.entrySet()) {
             String location = entry.getKey();
+            String name = location.replace("flower_", ""); // Remove prefix for name
             int resId = entry.getValue();
-            photos.add(new Photo(resId, location, location));
+            dbHelper.addPhoto(name, resId);
         }
-
-        return photos;
     }
+
+
 }
