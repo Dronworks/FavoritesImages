@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,11 +21,13 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
     public static class PhotoViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         ImageButton favoriteButton;
+        TextView nameTextView;
 
         public PhotoViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.photoImageView);
             favoriteButton = itemView.findViewById(R.id.favoriteButton);
+            nameTextView = itemView.findViewById(R.id.photoNameTextView);
         }
     }
 
@@ -39,8 +42,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
     public void onBindViewHolder(PhotoViewHolder holder, int position) {
         Photo photo = photoList.get(position);
         holder.imageView.setImageResource(photo.getImageResId());
+        holder.nameTextView.setText(photo.getName());
 
-        // Set heart icon based on favorite status
         if (photo.isFavorite()) {
             holder.favoriteButton.setImageResource(R.drawable.ic_heart_filled_res);
         } else {
@@ -49,7 +52,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
         holder.favoriteButton.setOnClickListener(v -> {
             photo.setFavorite(!photo.isFavorite());
-            notifyItemChanged(position); // or just update icon
+            notifyItemChanged(position);
         });
     }
 

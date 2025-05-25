@@ -52,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Group photos by location
         for (Map.Entry<String, Integer> entry : resourceMap.entrySet()) {
-            String name = entry.getKey();
+            String location = entry.getKey();
             int resId = entry.getValue();
-            photos.add(new Photo(resId, name));
+            photos.add(new Photo(resId, location, location));
         }
 
         return photos;

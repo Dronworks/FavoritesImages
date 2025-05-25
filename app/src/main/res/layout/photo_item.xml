@@ -10,6 +10,19 @@
         android:layout_height="200dp"
         android:scaleType="centerCrop" />
 
+    <!-- Photo Name (Bottom-Left) -->
+    <TextView
+        android:id="@+id/photoNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="8dp"
+        android:text="Photo Name"
+        android:textColor="#FFFFFF"
+        android:background="#80000000"
+        android:padding="4dp"
+        android:textSize="14sp" />
+
     <ImageButton
         android:id="@+id/favoriteButton"
         android:layout_width="50dp"
