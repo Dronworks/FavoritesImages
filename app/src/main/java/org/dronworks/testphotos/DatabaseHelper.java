@@ -55,9 +55,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    // הבנתי את המטרה של הפונקציה למטה, אבל לא הבנתי את הקוד
     public boolean isFavorite(int userId, int photoId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
+                // לא הבנתי את השורה מלמטה, הכוונה שהיא בוחרת העדפה?
                 "SELECT 1 FROM Favorite WHERE " + COLUMN_USER_ID + " = ? AND " + COLUMN_PHOTO_ID + " = ?",
                 new String[]{String.valueOf(userId), String.valueOf(photoId)});
         boolean exists = cursor.moveToFirst();
@@ -70,12 +72,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_ID, userId);
         values.put(COLUMN_PHOTO_ID, photoId);
-        db.insert(TABLE_NAME_FAVORITE, null, values);
+        db.insert(TABLE_NAME_FAVORITE, null, values); // למה TABLE_NAME_FAVORITE? זה לא יכניס רק את השם של ההעדפה? גם מה המשמעות של NULL פה?
     }
 
     public void removeFavorite(int userId, int photoId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_NAME_FAVORITE, COLUMN_USER_ID + " = ? AND " + COLUMN_PHOTO_ID + " = ?",
+        SQLiteDatabase db = this.getWritableDatabase(); // מה בעצם השורות האלו אומרות? לא מאה אחוז מבינה
+        db.delete(TABLE_NAME_FAVORITE, COLUMN_USER_ID + " = ? AND " + COLUMN_PHOTO_ID + " = ?", // למה יש סימני שאלה?
                 new String[]{String.valueOf(userId), String.valueOf(photoId)});
     }
 
@@ -96,6 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Photo> photos = new ArrayList<>();
         // Query the database to get all photos
         String[] columns = {COLUMN_ID, COLUMN_NAME, COLUMN_RES_LOCATION};
+        // מה זה QUERY?
         try (Cursor cursor = db.query(TABLE_NAME_PHOTO, columns, null, null, null, null, null)) {
             while (cursor.moveToNext()) {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));

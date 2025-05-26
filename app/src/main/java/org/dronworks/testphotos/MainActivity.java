@@ -22,13 +22,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this)); // מה זה LayoutManager
         dbHelper = new DatabaseHelper(this);
 
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         boolean isFirstLaunch = prefs.getBoolean("isFirstLaunch", true);
 
-        if (isFirstLaunch) {
+        if (isFirstLaunch) { // לא הבנתי את זה ובכללי את isFirstLaunch
             dbHelper.createDefaultUser();
             loadPhotosToDB();
             prefs.edit().putBoolean("isFirstLaunch", false).apply();
@@ -43,13 +43,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void loadPhotosToDB() {
-        Map<String, Integer> resourceMap = new HashMap<>();
+        Map<String, Integer> resourceMap = new HashMap<>(); // מה זה מפה?
 
         // Use reflection to get all drawable resources
-        try {
-            Class<?> drawableClass = R.drawable.class;
-            for (java.lang.reflect.Field field : drawableClass.getDeclaredFields()) {
+        try { // לא מכירה TRY ו- CATCH
+            Class<?> drawableClass = R.drawable.class; // מה זה הסימן שאלה?
+            for (java.lang.reflect.Field field : drawableClass.getDeclaredFields()) { // מה זה FIELD?
                 String resourceName = field.getName();
+                // מה הבדיקה למטה עושה? הרי כל התמונות יהיו פרחים לא?
                 if( !resourceName.startsWith("flower")) continue; // Filter by specific names
                 int resourceId = field.getInt(null); // Get the resource ID
                 resourceMap.put(resourceName, resourceId);
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Group photos by location
-        for (Map.Entry<String, Integer> entry : resourceMap.entrySet()) {
+        for (Map.Entry<String, Integer> entry : resourceMap.entrySet()) { //לא הבנתי את הפעולה פה ולא הבנתי את המבנה של הFOR
             String location = entry.getKey();
             String name = location.replace("flower_", ""); // Remove prefix for name
             int resId = entry.getValue();

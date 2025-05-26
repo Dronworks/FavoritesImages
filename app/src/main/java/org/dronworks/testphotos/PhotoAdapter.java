@@ -64,12 +64,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
             }
 
             photo.setFavorite(!photo.isFavorite());
-            notifyItemChanged(position);
+            notifyItemChanged(position); // לא הבנתי את השורה הזאת
         });
     }
 
     @Override
     public int getItemCount() {
         return photoList.size();
-    }
+    }  // למה צריך את זה? להראות למשתמש כמה פרחים יש לו בשמורים?
 }
