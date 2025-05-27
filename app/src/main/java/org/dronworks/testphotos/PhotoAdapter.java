@@ -1,6 +1,7 @@
 package org.dronworks.testphotos;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,12 +70,11 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         });
 
         holder.imageView.setOnClickListener(v -> {
-            String description = photo.getDescription();
-            new AlertDialog.Builder(holder.itemView.getContext())
-                    .setTitle(photo.getName())
-                    .setMessage(description)
-                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                    .show();
+            Intent intent = new Intent(holder.itemView.getContext(), FullScreenPhotoActivity.class);
+            intent.putExtra(FullScreenPhotoActivity.EXTRA_IMAGE_RES_ID, photo.getImageResId());
+            intent.putExtra(FullScreenPhotoActivity.EXTRA_NAME, photo.getName());
+            intent.putExtra(FullScreenPhotoActivity.EXTRA_DESCRIPTION, photo.getDescription());
+            holder.itemView.getContext().startActivity(intent);
         });
     }
 
