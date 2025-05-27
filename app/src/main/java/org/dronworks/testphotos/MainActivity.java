@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,18 +21,17 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    RecyclerView recyclerView;
-    PhotoAdapter adapter;
+
     DatabaseHelper dbHelper;
+    BottomNavigationView bottomNavigationView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         dbHelper = new DatabaseHelper(this);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         boolean isFirstLaunch = prefs.getBoolean("isFirstLaunch", true);
@@ -41,11 +42,9 @@ public class MainActivity extends AppCompatActivity {
             prefs.edit().putBoolean("isFirstLaunch", false).apply();
         }
 
-
-        List<Photo> photos = dbHelper.loadPhotosByLocation();
-
-        adapter = new PhotoAdapter(photos, dbHelper);
-        recyclerView.setAdapter(adapter);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new HomeFragment())
+                .commit();
     }
 
     private void loadPhotosToDB() {
