@@ -11,11 +11,11 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "photo_app.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_RES_LOCATION = "res_location";
-
+    public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_USER_ID = "user_id";
     public static final String COLUMN_PHOTO_ID = "photo_id";
     public static final String TABLE_NAME_PHOTO = "Photo";
@@ -36,6 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE Photo (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COLUMN_NAME + " TEXT NOT NULL," +
+                COLUMN_DESCRIPTION + " TEXT NOT NULL," +
                 COLUMN_RES_LOCATION + " INTEGER NOT NULL)");
 
         db.execSQL("CREATE TABLE Favorite (" +
@@ -79,13 +80,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(userId), String.valueOf(photoId)});
     }
 
-    public void addPhoto(String name, int resId) {
+    public void addPhoto(String name, String description, int resId) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // Insert photo into the Photo table
         ContentValues values2 = new ContentValues();
         values2.put(COLUMN_NAME, name);
         values2.put(COLUMN_RES_LOCATION, resId);  // Resource ID
+        values2.put(COLUMN_DESCRIPTION, description); // Description
         db.insert(TABLE_NAME_PHOTO, null, values2);
 
     }
@@ -95,15 +97,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         List<Photo> photos = new ArrayList<>();
         // Query the database to get all photos
-        String[] columns = {COLUMN_ID, COLUMN_NAME, COLUMN_RES_LOCATION};
+        String[] columns = {COLUMN_ID, COLUMN_NAME, COLUMN_RES_LOCATION, COLUMN_DESCRIPTION};
         try (Cursor cursor = db.query(TABLE_NAME_PHOTO, columns, null, null, null, null, null)) {
             while (cursor.moveToNext()) {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
                 int resLocation = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RES_LOCATION));
 
                 // Create Photo object and add to the list
-                Photo photo = new Photo(resLocation, name, id);
+                Photo photo = new Photo(resLocation, name, id, description);
                 photos.add(photo);
             }
         }

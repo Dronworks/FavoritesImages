@@ -1,5 +1,6 @@
 package org.dronworks.testphotos;
 
+import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
             photo.setFavorite(!photo.isFavorite());
             notifyItemChanged(position);
+        });
+
+        holder.imageView.setOnClickListener(v -> {
+            String description = photo.getDescription();
+            new AlertDialog.Builder(holder.itemView.getContext())
+                    .setTitle(photo.getName())
+                    .setMessage(description)
+                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                    .show();
         });
     }
 

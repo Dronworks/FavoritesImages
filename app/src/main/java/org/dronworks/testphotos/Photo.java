@@ -6,6 +6,7 @@ public class Photo {
     private final int imageResId;
     private boolean isFavorite;
     private final String name;
+    private final String description;
 
     public String getName() {
         return name;
@@ -18,10 +19,11 @@ public class Photo {
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
     }
-    public Photo(int imageResId, String name, int imageDbId) {
+    public Photo(int imageResId, String name, int imageDbId, String description) {
         this.imageResId = imageResId;
         this.name = name;
         this.imageDbId = imageDbId;
+        this.description = description;
     }
 
     public int getImageDbId() {
@@ -32,4 +34,7 @@ public class Photo {
         return imageResId;
     }
 
+    public String getDescription() {
+        return description;
+    }
 }
